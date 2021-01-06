@@ -12,7 +12,8 @@ logging.basicConfig(level="INFO")
 response_time = None
 
 def test_mock_service():
-    url = 'http://0.0.0.0:10000/api?query=trump&articles_per_day=30'    
+    # url = 'http://0.0.0.0:10000/api?query=trump&articles_per_day=30'    
+    url = "https://newscast-api.herokuapp.com/api"
     resp = requests.get(url)
 
     if resp.status_code != 200:
@@ -58,8 +59,8 @@ def loop_test(loop_wait=0, loop_times=sys.maxsize):
 if __name__ == '__main__':
     response_time = []
     ### Test Settings ###
-    concurrent_users = 1
-    loop_times = 1
+    concurrent_users = 5
+    loop_times = 3
     
     workers = []
     start_time = time.time()
