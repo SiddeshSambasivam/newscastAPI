@@ -19,7 +19,7 @@ Even though there are a lot of other APIs that provide the same serive, almost a
 
 ## **Usage:**
 
-<br/>
+**API:** `https://newscast-api.herokuapp.com/api`
 
 ```python
 # Python 3.7.9
