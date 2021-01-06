@@ -19,7 +19,7 @@ Other options and features are still under development.
 
 ## **Goal of the project:**
 
-Even though there are a lot of other APIs that provide the same serive, almost all of them are paid and expensive, so I just thought of developing it on my own and turned out to be an exciting project.
+Even though there are a lot of other APIs that provide the same serive, almost all of them are paid and expensive, so I just thought of developing it on my own and the project turned out to be an exciting project.
 
 ## **Usage:**
 
