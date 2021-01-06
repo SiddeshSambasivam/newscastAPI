@@ -1,8 +1,12 @@
 # **newscastAPI**
 
+<p align="center">
+  <img src="./assets/title.png" style="width:800px;height:500px">
+</p>
+
 **newscastAPI** is a simple REST API to get you all the news articles for any given query word.
 
-The API provides headlines, source of the articles, published timestamps, urls and various other useful data which potentially has numerous practical use cases such as tracking the sentiment of a specific person in news, searching for buzz words and so on.
+The API provides headlines, source of the articles, published timestamps, urls and various other useful data which potentially has numerous practical use cases such as tracking sentiment of a specific person in news, searching for buzz words and so on.
 
 > **NOTE:** This is an early release of the API, hence certain features are still under development.
 
@@ -56,7 +60,16 @@ fetch("https://newscast-api.herokuapp.com/api", {
 
 ## **Architecture**
 
-> To be added
+newscastAPI consists of 2 components,
+
+1. Data collection Pipeline
+2. Data serving pipeline
+
+The following are describes the flow of operation in each of the pipeline.
+
+<p align="center">
+  <img src="./assets/data.png">
+</p>
 
 ## **Concurrent Speed Test**
 
@@ -65,9 +78,8 @@ fetch("https://newscast-api.herokuapp.com/api", {
 **Publication**
 
 - [ ] Get a logo
-- [ ] Usage: example scripts
+- [x] Usage: example scripts
 - [ ] Architecture design of the API
-- [ ] Tech Stack used
 - [ ] LinkedIn post
 
 **Development**
