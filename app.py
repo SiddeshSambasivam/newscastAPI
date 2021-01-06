@@ -13,8 +13,6 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 import atexit
 
-from config import user_, pass_
-
 app = Flask(__name__)
 app.config["DEBUG"] = False
 CORS(app)
@@ -24,6 +22,9 @@ apscheduler_logger = logging.getLogger("apscheduler").setLevel(logging.WARNING)
 logging.basicConfig(level="INFO")
 
 PORT = int(os.environ.get("PORT", 10000))
+user_ = os.environ.get("user_")
+pass_ = os.environ.get("pass_")
+
 
 data_frame = None # local caching
 
@@ -31,7 +32,7 @@ scheduler = BackgroundScheduler()
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
 
-def cache_data():
+def cache_data(start=True):
 
     global data_frame
 
@@ -128,5 +129,6 @@ def endpoint():
 
 if __name__ == "__main__":
 
+    print(user_, pass_)
     cache_data() # cache data at the startup
     app.run(debug=True, host="0.0.0.0", port=PORT)
