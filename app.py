@@ -48,7 +48,8 @@ def cache_data():
 
 scheduler.add_job(
     func=cache_data,
-    trigger=IntervalTrigger(minutes=75),
+    trigger=IntervalTrigger(seconds=5),
+    # trigger=IntervalTrigger(minutes=75),
     replace_existing=True)
 
 
