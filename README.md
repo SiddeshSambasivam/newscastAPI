@@ -1,5 +1,7 @@
 <p align="center">
-  <h1><b>Newscast API</b></h1>
+  <img src="./assets/title.png" style="width:800px;height:500px">
+  <br/><br/>
+
   <a href="https://github.com/SiddeshSambasivam/newscastAPI">
     <img src="./assets/git.png" style="height:40px;width:40px">
   </a>
