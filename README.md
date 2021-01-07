@@ -8,7 +8,7 @@
 
 The API provides headlines, source of the articles, published timestamps, urls and various other useful data which potentially has numerous practical use cases such as tracking sentiment of a specific person in news, searching for buzz words and so on.
 
-> **NOTE:** This is an early release of the API, hence certain features are still under development.
+> **NOTE:** This is an early release of the API, hence certain features are still under development and therefore the performance is not optimised.
 
 You can search news articles using the following options:
 
@@ -68,26 +68,26 @@ newscastAPI consists of 2 components,
 The following are describes the flow of operation in each of the pipeline.
 
 <p align="center">
-  <img src="./assets/data.png">
+  <img src="./assets/collection.png" style="width:1000px">
+</p>
+
+<p align="center">
+  <img src="./assets/serve.png" style="width:1000px">
 </p>
 
 ## **Concurrent Speed Test**
 
+The following tests were ran using the `test_script.py` inside the `scripts` folder.
+
+| Number of concurrent users | Number of calls pre user | Avg Time Taken (seconds) |
+| -------------------------- | ------------------------ | ------------------------ |
+| 2                          | 5                        | 0.0584594                |
+| 10                         | 10                       | 0.28386273               |
+| 100                        | 10                       | 2.508303014              |
+
 ## **To-Do List**
-
-**Publication**
-
-- [ ] Get a logo
-- [x] Usage: example scripts
-- [ ] Architecture design of the API
-- [ ] LinkedIn post
-
-**Development**
-
-- [ ] Complete the timeperiod query method
-- [ ] Test the speed of the API - Benchmark the speed
 
 **To be Implemented**
 
 - [ ] Implementing caching using redis
-- [ ] Top keywords that occurs in news for anygiven day
+- [ ] Top keywords that occurs in news for any given day
