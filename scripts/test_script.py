@@ -12,8 +12,8 @@ logging.basicConfig(level="INFO")
 response_time = None
 
 def test_mock_service():
-    # url = 'http://0.0.0.0:10000/api?query=trump&articles_per_day=30'    
-    url = "https://newscast-api.herokuapp.com/api"
+    url = 'http://0.0.0.0:10000/api?query=trump&articles_per_day=2&from_date=01/01/2021,%2000:00:00&to_date=07/01/2021,%2000:00:00'    
+    # url = "https://newscast-api.herokuapp.com/api"
     resp = requests.get(url)
 
     if resp.status_code != 200:
@@ -28,7 +28,7 @@ def test_mock_service():
         # print()
         # print(*resp.json()["results"], sep="\n\n")
         # print()
-        logging.info('Test passed.')
+        # logging.info('Test passed.')
         return 'pass', resp.elapsed.total_seconds()
         
 
@@ -46,7 +46,7 @@ def loop_test(loop_wait=0, loop_times=sys.maxsize):
     while looped_times < loop_times:            
         # run an API test
         test_result, elapsed_time = test_mock_service()           
-        logging.info(f"Elapsed Time: {elapsed_time}")
+        # logging.info(f"Elapsed Time: {elapsed_time}")
         # print()
         response_time.append(elapsed_time)
         # put results into a queue for statistics
@@ -59,8 +59,8 @@ def loop_test(loop_wait=0, loop_times=sys.maxsize):
 if __name__ == '__main__':
     response_time = []
     ### Test Settings ###
-    concurrent_users = 5
-    loop_times = 3
+    concurrent_users = 100
+    loop_times = 10
     
     workers = []
     start_time = time.time()
