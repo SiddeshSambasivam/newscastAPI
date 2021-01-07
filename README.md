@@ -90,4 +90,4 @@ The following tests were ran using the `test_script.py` inside the `scripts` fol
 **To be Implemented**
 
 - [ ] Implementing caching using redis
-- [ ] Top keywords that occurs in news for any given day
+- [ ] Top keywords that occurs in news on any given day
