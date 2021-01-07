@@ -15,6 +15,15 @@ You can search news articles using the following options:
 - **Keywords:** You can search for any news articles which contains the keyword (using exact match).
 - **timeperiod** You can specify the time period that you want articles to be published on. For example, search for `trump` from `03-01-2021` to `06-01-2021`. There is also an additional option of choosing how many articles to be returned for each day for any given keyword with in a timeperiod.
 
+The API provides the following data for each news article,
+
+1. Headline
+2. Source
+3. url to the article
+4. published timestamp
+5. category
+6. country
+
 Other options and features are still under development.
 
 ## **Goal of the project:**
