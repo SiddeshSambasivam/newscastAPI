@@ -58,6 +58,16 @@ fetch("https://newscast-api.herokuapp.com/api", {
   });
 ```
 
+- Using `query` without `from_date` and `to_date` will fetch today's news about the query, therefore its always best to specify the timeframe. For example,
+
+  `https://newscast-api.herokuapp.com/api?query=ronaldo&from_date=01/01/2021,%2000:00:00&to_date=07/01/2021,%2000:00:00`
+
+  By default, the api only fetchs 10 articles per day about given `query`.
+
+- Using only `from_date` and `to_date` will fetch all the news articles in the given timeframe. For example,
+
+  `https://newscast-api.herokuapp.com/api?from_date=01/01/2021,%2000:00:00&to_date=07/01/2021,%2000:00:00&articles_per_day=100`
+
 ## **Architecture**
 
 newscastAPI consists of 2 components,
@@ -85,9 +95,11 @@ The following tests were ran using the `test_script.py` inside the `scripts` fol
 | 10                         | 10                       | 0.28386273               |
 | 100                        | 10                       | 2.508303014              |
 
-## **To-Do List**
+## **To be Implemented**
 
-**To be Implemented**
+Will be implementing these features as soon as possible...
 
 - [ ] Implementing caching using redis
 - [ ] Top keywords that occurs in news on any given day
+- [ ] Search by category
+- [ ] Search by country
