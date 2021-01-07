@@ -1,11 +1,27 @@
-<center> 
-  <h2 style="font-size:40px">
-    <b>Newscast API</b>
-  </h2>
+<p align="center">
+  <h1><b>Newscast API</b></h1>
+  <a href="https://github.com/SiddeshSambasivam/newscastAPI">
+    <img src="./assets/git.png" style="height:40px;width:40px">
+  </a>
+  <a href="https://github.com/SiddeshSambasivam/newscastAPI">
+    <img src="./assets/linkedin.png" style="height:40px;width:40px;margin-left:20px">
+  </a>
+  <a href="https://github.com/SiddeshSambasivam/newscastAPI">
+    <img src="./assets/med.png" style="height:42px;width:42px;margin-left:20px">
+  </a>
+</p>
 
-  <h3 style="font-size:18px">
-    An interface to fetch real-time news articles from various sources with meta data for any given word and timeframe.
-  <h3>
-  <br/>
-    <img src="./assets/title.png" style="width:800px;height:500px">
-</center>
+Article Topic Points
+
+- [ ] What is the project about?
+- [ ] Inspiration
+- [ ] what it does
+- [ ] How I built it
+
+  - [ ] link to the medium article
+  - [ ] built with
+  - [ ] repo
+
+- [ ] Challenges I ran into
+- [ ] whats next?
+- [ ] link to the
