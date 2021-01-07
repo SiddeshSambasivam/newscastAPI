@@ -1,4 +1,9 @@
-<p align="center">
+---
+layout: post
+title: Blogging Like a Hacker
+---
+
+<!-- <p align="center">
   <img src="./assets/title.png" style="width:800px;height:500px">
   <br/><br/>
 
@@ -26,4 +31,8 @@ Article Topic Points
 
 - [ ] Challenges I ran into
 - [ ] whats next?
-- [ ] link to the
+- [ ] link to the -->
+
+**newscastAPI** is a simple REST API to get you all the news articles for any given query word.
+
+The API provides headlines, source of the articles, published timestamps, urls and various other useful data which potentially has numerous practical use cases such as tracking sentiment of a specific person in news, searching for buzz words and so on.
