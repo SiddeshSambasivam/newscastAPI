@@ -1,19 +1,20 @@
-# **newscastAPI**
+# **Newscast API**
 
 <p align="center">
-  <img src="./assets/title.png" style="width:800px;height:500px">
+  <br>
+  <img src="./assets/title.png" style="width:450px;height:300px">
+  <br>
 </p>
+
+<h2 align="center" style="font-weight:bold;font-size:35px">
+<p>Newscast API</p>
+</h2>
 
 **newscastAPI** is a simple REST API to get you all the news articles for any given query word.
 
 The API provides headlines, source of the articles, published timestamps, urls and various other useful data which potentially has numerous practical use cases such as tracking sentiment of a specific person in news, searching for buzz words and so on.
 
 > **NOTE:** This is an early release of the API, hence certain features are still under development and therefore the performance is not optimised.
-
-You can search news articles using the following options:
-
-- **Keywords:** You can search for any news articles which contains the keyword (using exact match).
-- **timeperiod** You can specify the time period that you want articles to be published on. For example, search for `trump` from `03-01-2021` to `06-01-2021`. There is also an additional option of choosing how many articles to be returned for each day for any given keyword with in a timeperiod.
 
 The API provides the following data for each news article,
 
@@ -24,13 +25,20 @@ The API provides the following data for each news article,
 5. category
 6. country
 
-Other options and features are still under development.
+You can search news articles using the following options:
 
-## **Goal of the project:**
+- **Keywords:** You can search for any news articles which contains the keyword (using exact match).
+- **timeperiod** You can specify the time period that you want articles to be published on. For example, search for `trump` from `03-01-2021` to `06-01-2021`. There is also an additional option of choosing how many articles to be returned for each day for any given keyword with in a timeperiod.
 
-Even though there are a lot of other APIs that provide the same serive, almost all of them are paid and expensive, so I just thought of developing it on my own and the project turned out to be an exciting project.
+<br/>
 
-## **Usage:**
+# **Inspiration**
+
+I have been working on a personal project to track the sentiment of any given word across various news articles and tweets. I needed an API to fetch all the news headlines for any given word and luckily I found quite a lot of alternatives which provided the exact service, but all of them were either expensive or had a lot of restrictions for its usage. So, I thought of building something which does the job at an acceptable performance.
+
+<br/>
+
+# **Usage**
 
 **API:** `https://newscast-api.herokuapp.com/api`
 
@@ -77,14 +85,14 @@ fetch("https://newscast-api.herokuapp.com/api", {
 
   `https://newscast-api.herokuapp.com/api?from_date=01/01/2021,%2000:00:00&to_date=07/01/2021,%2000:00:00&articles_per_day=100`
 
-## **Architecture**
+<br/>
 
-newscastAPI consists of 2 components,
+# **Backend Architecture**
+
+**newscastAPI's** backend is a product of fundamental 2 components,
 
 1. Data collection Pipeline
 2. Data serving pipeline
-
-The following are describes the flow of operation in each of the pipeline.
 
 <p align="center">
   <img src="./assets/collection.png" style="width:1000px">
@@ -94,7 +102,9 @@ The following are describes the flow of operation in each of the pipeline.
   <img src="./assets/serve.png" style="width:1000px">
 </p>
 
-## **Concurrent Speed Test**
+<br/>
+
+# **Concurrent Speed Test**
 
 The following tests were ran using the `test_script.py` inside the `scripts` folder.
 
@@ -104,7 +114,9 @@ The following tests were ran using the `test_script.py` inside the `scripts` fol
 | 10                         | 10                       | 0.28386273               |
 | 100                        | 10                       | 2.508303014              |
 
-## **To be Implemented**
+<br/>
+
+# **To be Implemented**
 
 Will be implementing these features as soon as possible...
 
