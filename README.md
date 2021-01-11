@@ -1,5 +1,4 @@
 <p align="center">
-  <br>
   <img src="./assets/title.png" style="width:450px;height:300px">
 </p>
 
