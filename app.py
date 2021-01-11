@@ -25,16 +25,17 @@ logger = logging.getLogger()
 apscheduler_logger = logging.getLogger("apscheduler").setLevel(logging.ERROR)
 logging.basicConfig(level="INFO")
 
-PORT  = int(os.environ.get("PORT", 10000))
+PORT = int(os.environ.get("PORT", 10000))
 user_ = os.environ.get("user_")
 pass_ = os.environ.get("pass_")
 INITIAL_CACHE = True
 
-data_frame = None # local caching
+data_frame = None  # local caching
 
 scheduler = BackgroundScheduler()
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
+
 
 def cache_data():
 
@@ -48,7 +49,7 @@ def cache_data():
         cache_job_start = scheduler.add_job(
             func=cache_data,
             trigger=IntervalTrigger(minutes=75),
-            replace_existing=True)        
+            replace_existing=True)
         INITIAL_CACHE = False
 
     # mongoDB database
@@ -60,38 +61,46 @@ def cache_data():
 
     sort_start = time.time()
     data_frame = pd.DataFrame(list(db.find({})))
-    sort_end   = time.time()
-    logging.info(f"Database loaded in {(db_end - db_start)} seconds and sorted in {(sort_end-sort_start)} seconds, with initial cache condition set to {INITIAL_CACHE}")
-    data_frame.sort_values(by=["unix timestamp"], ascending=False, inplace=True)
-    logger.info(f"Cached {len(data_frame)} records")    
+    sort_end = time.time()
+    logging.info(
+        f"Database loaded in {(db_end - db_start)} seconds and sorted in {(sort_end-sort_start)} seconds, with initial cache condition set to {INITIAL_CACHE}")
+    data_frame.sort_values(by=["unix timestamp"],
+                           ascending=False, inplace=True)
+    logger.info(f"Cached {len(data_frame)} records")
 
     del db, client
+
 
 cache_job_start = scheduler.add_job(
     func=cache_data,
     trigger=IntervalTrigger(seconds=10),
     replace_existing=True)
 
-def query_search(query:str) -> pd.DataFrame:
+
+def query_search(query: str) -> pd.DataFrame:
     '''Searches the cached dataframe for all the instances of the query and returns the resultant dataframe'''
 
     query = query.lower()
 
-    result_frame = data_frame[data_frame['title'].str.contains(query, flags=re.IGNORECASE, regex=True)]
+    result_frame = data_frame[data_frame['title'].str.contains(
+        query, flags=re.IGNORECASE, regex=True)]
     del query
 
     return result_frame
 
-def getBy_timestamp(from_date:datetime, to_date:datetime, articles_per_day:int, local_df) -> pd.DataFrame:
+
+def getby_timestamp(from_date: datetime, to_date: datetime, articles_per_day: int, local_df) -> pd.DataFrame:
     '''Filters by the timeperiod & articles per day and returns the results'''
 
     from_timestamp = int(datetime.datetime.timestamp(from_date))
     to_timestamp = int(datetime.datetime.timestamp(to_date))
-    
 
-    result_frame = local_df[(local_df["unix timestamp"] >= from_timestamp) & (local_df["unix timestamp"] <= to_timestamp)]
-    result_frame.sort_values(by="unix timestamp", ascending=False, inplace=True)
-    result_frame["unix timestamp"] = result_frame["unix timestamp"].apply(lambda x: datetime.datetime.utcfromtimestamp(x).date().strftime('%d-%m-%Y'))
+    result_frame = local_df[(local_df["unix timestamp"] >= from_timestamp) & (
+        local_df["unix timestamp"] <= to_timestamp)]
+    result_frame.sort_values(
+        by="unix timestamp", ascending=False, inplace=True)
+    result_frame["unix timestamp"] = result_frame["unix timestamp"].apply(
+        lambda x: datetime.datetime.utcfromtimestamp(x).date().strftime('%d-%m-%Y'))
     dates = result_frame["unix timestamp"].unique()
 
     titles = []
@@ -100,48 +109,78 @@ def getBy_timestamp(from_date:datetime, to_date:datetime, articles_per_day:int, 
         _recs = result_frame[result_frame["unix timestamp"] == d]
         titles += _recs["title"].iloc[:articles_per_day].to_list()
 
-    result_frame = result_frame[result_frame["title"].isin(titles)][["title", "source", "timestamp", "url", "category", "country"]]
+    result_frame = result_frame[result_frame["title"].isin(
+        titles)][["title", "source", "timestamp", "url", "category", "country"]]
 
     del from_timestamp, to_timestamp, titles
 
     return result_frame
 
 
-def get_results(from_date:str, to_date:str, query:str = None, articles_per_day:int=10) -> dict:
-    
-    timeperiod_condn = (from_date != datetime.datetime.utcnow().date().strftime("%d/%m/%Y, %H:%M:%S") \
+def get_results(from_date: str, to_date: str, query: str = None, articles_per_day: int = 10) -> dict:
+
+    timeperiod_condn = (from_date != datetime.datetime.utcnow().date().strftime("%d/%m/%Y, %H:%M:%S")
                         or to_date != "".join([datetime.datetime.utcnow().date().strftime("%d/%m/%Y"), ", 11:59:59"]))
-    
+
     from_date = convert_str_to_datetime(from_date)
     to_date = convert_str_to_datetime(to_date)
 
     if query == None:
-        
+
         if timeperiod_condn:
             '''return the top results in the given timeframe'''
 
-            results = getBy_timestamp(from_date, to_date, articles_per_day, data_frame)
-            results = [ parse_data(row[0]) for row in zip(results.iloc[:articles_per_day][["title", "source", "timestamp", "url", "category", "country"]].to_numpy())]
-            return {"len":len(results), "results":results}
+            results = getBy_timestamp(
+                from_date, to_date, articles_per_day, data_frame)
+            results = [parse_data(row[0]) for row in zip(results.iloc[:articles_per_day][[
+                "title", "source", "timestamp", "url", "category", "country"]].to_numpy())]
+            return {"len": len(results), "results": results}
 
         # In case no query provided, return the top 10 recent headlines
-        results = [ parse_data(row[0]) for row in zip(data_frame.iloc[:articles_per_day][["title", "source", "timestamp", "url", "category", "country"]].to_numpy())]
-        
-        return {"len":len(results), "results":results}
-    
+        results = [parse_data(row[0]) for row in zip(data_frame.iloc[:articles_per_day][[
+            "title", "source", "timestamp", "url", "category", "country"]].to_numpy())]
+
+        return {"len": len(results), "results": results}
+
     results = query_search(query)
 
     if timeperiod_condn:
         '''return the top results in the given timeframe'''
 
-        results = getBy_timestamp(from_date, to_date, articles_per_day, results)
-        results = [ parse_data(row[0]) for row in zip(results[["title", "source", "timestamp", "url", "category", "country"]].to_numpy())]            
-        
-        return {"len":len(results), "results":results}
+        results = getBy_timestamp(
+            from_date, to_date, articles_per_day, results)
+        results = [parse_data(row[0]) for row in zip(
+            results[["title", "source", "timestamp", "url", "category", "country"]].to_numpy())]
 
-    results = [ parse_data(row[0]) for row in zip(results.iloc[:articles_per_day][["title", "source", "timestamp", "url", "category", "country"]].to_numpy())]    
+        return {"len": len(results), "results": results}
 
-    return {"len":len(results),"results":results}
+    results = [parse_data(row[0]) for row in zip(results.iloc[:articles_per_day][[
+        "title", "source", "timestamp", "url", "category", "country"]].to_numpy())]
+
+    if len(results) == 0:
+        # crawl some data on this topic and update the topic
+
+        baseurl = f"https://news.google.com/search?q={query}&"
+
+        process = CrawlerProcess(get_project_settings())
+
+        countries = "US,SG,IN".split(',')
+
+        for country in countries:
+
+            baseurl += f"hl=en-{country}&gl={country}&ceid={country}%3Aen"
+            # Params for the spider: start_url, country, category
+            process.crawl(newscast, start_url=baseurl,
+                          country=country, category="user defined")
+            log.info(f"Crawl complete for the category {category}...")
+
+        process.start(stop_after_crawl=True)
+
+        results = pd.read_csv("tmp.csv")
+        results = [parse_data(row[0]) for row in zip(results.iloc[:articles_per_day][[
+            "title", "source", "timestamp", "url", "category", "country"]].to_numpy())]
+
+    return {"len": len(results), "results": results}
 
 
 @app.route("/api", methods=["GET"])
@@ -156,11 +195,7 @@ def endpoint():
         "articles_per_day": 10,
     }
 
-    # -1 - Most recent
-    #  1 - Least recent 
-    sortBy = -1 # Still have to use it in implementation
-    
-    params = request.args.to_dict() # parse user params
+    params = request.args.to_dict()  # parse user params
     for k, v in params.items():
         if k not in config:
             response = flask.Response()
@@ -178,11 +213,11 @@ def endpoint():
         return response
 
     results = get_results(
-        query= query, 
-        from_date= config["from_date"], 
-        to_date= config["to_date"], 
-        articles_per_day= articles_per_day
-        )
+        query=query,
+        from_date=config["from_date"],
+        to_date=config["to_date"],
+        articles_per_day=articles_per_day
+    )
 
     return flask.jsonify(results)
 
