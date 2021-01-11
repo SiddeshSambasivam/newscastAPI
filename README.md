@@ -1,7 +1,6 @@
 <p align="center">
   <br>
   <img src="./assets/title.png" style="width:450px;height:300px">
-  <br>
 </p>
 
 **newscastAPI** is a simple REST API to get you all the news articles for any given query word.
