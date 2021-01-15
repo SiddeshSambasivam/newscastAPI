@@ -89,7 +89,7 @@ def query_search(query: str) -> pd.DataFrame:
     return result_frame
 
 
-def getby_timestamp(from_date: datetime, to_date: datetime, articles_per_day: int, local_df) -> pd.DataFrame:
+def getBy_timestamp(from_date: datetime, to_date: datetime, articles_per_day: int, local_df) -> pd.DataFrame:
     '''Filters by the timeperiod & articles per day and returns the results'''
 
     from_timestamp = int(datetime.datetime.timestamp(from_date))
