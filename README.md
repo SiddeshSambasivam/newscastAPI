@@ -2,6 +2,12 @@
   <img src="./assets/title.png" style="width:450px;height:300px">
 </p>
 
+<p align="center">
+  <img src="https://badges.pufler.dev/updated/SiddeshSambasivam/newscastAPI" alt="GitHub license">
+  <img alt="GitHub deployments" src="https://img.shields.io/github/deployments/SiddeshSambasivam/newscastAPI/newscast-api">
+  <img alt="GitHub file size in bytes" src="https://img.shields.io/github/size/SiddeshSambasivam/newscastAPI/app.py">
+</p>
+
 **newscastAPI** is a simple REST API to get you all the news articles for any given query word.
 
 The API provides headlines, source of the articles, published timestamps, urls and various other useful data which potentially has numerous practical use cases such as tracking sentiment of a specific person in news, searching for buzz words and so on.

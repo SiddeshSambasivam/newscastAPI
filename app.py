@@ -120,7 +120,7 @@ def getBy_timestamp(from_date: datetime, to_date: datetime, articles_per_day: in
 def get_results(from_date: str, to_date: str, query: str = None, articles_per_day: int = 10) -> dict:
 
     timeperiod_condn = (from_date != datetime.datetime.utcnow().date().strftime("%d/%m/%Y, %H:%M:%S")
-                        or to_date != "".join([datetime.datetime.utcnow().date().strftime("%d/%m/%Y"), ", 11:59:59"]))
+                        or to_date != "".join([datetime.datetime.utcnow().date().strftime("%d/%m/%Y"), ", 23:59:59"]))
 
     from_date = convert_str_to_datetime(from_date)
     to_date = convert_str_to_datetime(to_date)
@@ -166,6 +166,11 @@ def get_results(from_date: str, to_date: str, query: str = None, articles_per_da
 
         countries = "US,SG,IN".split(',')
 
+        # instantiate the database and get the recent timestamp
+        client = MongoClient(
+            f"mongodb+srv://{_user}:{_pass}@db-news-and-tweets.buxsd.mongodb.net/test")
+        db = client.daily_feeds.feeds
+
         for country in countries:
 
             baseurl += f"hl=en-{country}&gl={country}&ceid={country}%3Aen"
@@ -191,7 +196,7 @@ def endpoint():
     config = {
         "query":  None,
         "from_date": datetime.datetime.utcnow().date().strftime("%d/%m/%Y, %H:%M:%S"),
-        "to_date": datetime.datetime.utcnow().date().strftime("%d/%m/%Y, %H:%M:%S"),
+        "to_date": datetime.datetime.utcnow().date().strftime("%d/%m/%Y, 23:59:29"),
         "articles_per_day": 10,
     }
 
