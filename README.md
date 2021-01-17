@@ -116,13 +116,3 @@ The following tests were ran using the `test_script.py` inside the `scripts` fol
 | 100                        | 10                       | 2.508303014              |
 
 <br/>
-
-# **To be Implemented**
-
-Will be implementing these features as soon as possible...
-
-- [ ] Implementing caching using redis
-- [ ] Top keywords that occurs in news on any given day
-- [ ] Search by category
-- [ ] Search by country
-- [ ] Unit tests
