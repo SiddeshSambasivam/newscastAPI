@@ -10,10 +10,12 @@ from flask_cors import CORS, cross_origin
 from pymongo import MongoClient
 import pymongo
 import pandas as pd
+from scrapy.crawler import CrawlerProcess
+from scrapy.utils.project import get_project_settings
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 import atexit
-from scrapy.crawler import CrawlerProcess
+
 
 from utils import convert_str_to_datetime
 from utils import parse_data
@@ -36,6 +38,11 @@ data_frame = None  # local caching
 scheduler = BackgroundScheduler()
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
+
+cache_job_start = scheduler.add_job(
+    func=cache_data,
+    trigger=IntervalTrigger(seconds=10),
+    replace_existing=True)
 
 
 def cache_data():
@@ -72,12 +79,6 @@ def cache_data():
     del db, client
 
 
-cache_job_start = scheduler.add_job(
-    func=cache_data,
-    trigger=IntervalTrigger(seconds=10),
-    replace_existing=True)
-
-
 def query_search(query: str) -> pd.DataFrame:
     '''Searches the cached dataframe for all the instances of the query and returns the resultant dataframe'''
 
@@ -90,7 +91,7 @@ def query_search(query: str) -> pd.DataFrame:
     return result_frame
 
 
-def getBy_timestamp(from_date: datetime, to_date: datetime, articles_per_day: int, local_df) -> pd.DataFrame:
+def getby_timestamp(from_date: datetime, to_date: datetime, articles_per_day: int, local_df) -> pd.DataFrame:
     '''Filters by the timeperiod & articles per day and returns the results'''
 
     from_timestamp = int(datetime.datetime.timestamp(from_date))
@@ -131,7 +132,7 @@ def get_results(from_date: str, to_date: str, query: str = None, articles_per_da
         if timeperiod_condn:
             '''return the top results in the given timeframe'''
 
-            results = getBy_timestamp(
+            results = getby_timestamp(
                 from_date, to_date, articles_per_day, data_frame)
             results = [parse_data(row[0]) for row in zip(results.iloc[:articles_per_day][[
                 "title", "source", "timestamp", "url", "category", "country"]].to_numpy())]
@@ -148,7 +149,7 @@ def get_results(from_date: str, to_date: str, query: str = None, articles_per_da
     if timeperiod_condn:
         '''return the top results in the given timeframe'''
 
-        results = getBy_timestamp(
+        results = getby_timestamp(
             from_date, to_date, articles_per_day, results)
         results = [parse_data(row[0]) for row in zip(
             results[["title", "source", "timestamp", "url", "category", "country"]].to_numpy())]
@@ -158,33 +159,7 @@ def get_results(from_date: str, to_date: str, query: str = None, articles_per_da
     results = [parse_data(row[0]) for row in zip(results.iloc[:articles_per_day][[
         "title", "source", "timestamp", "url", "category", "country"]].to_numpy())]
 
-    if len(results) == 0:
-        # crawl some data on this topic and update the topic
-
-        baseurl = f"https://news.google.com/search?q={query}&"
-
-        process = CrawlerProcess(get_project_settings())
-
-        countries = "US,SG,IN".split(',')
-
-        # instantiate the database and get the recent timestamp
-        client = MongoClient(
-            f"mongodb+srv://{_user}:{_pass}@db-news-and-tweets.buxsd.mongodb.net/test")
-        db = client.daily_feeds.feeds
-
-        for country in countries:
-
-            baseurl += f"hl=en-{country}&gl={country}&ceid={country}%3Aen"
-            # Params for the spider: start_url, country, category
-            process.crawl(newscast, start_url=baseurl,
-                          country=country, category="user defined")
-            log.info(f"Crawl complete for the category {category}...")
-
-        process.start(stop_after_crawl=True)
-
-        results = pd.read_csv("tmp.csv")
-        results = [parse_data(row[0]) for row in zip(results.iloc[:articles_per_day][[
-            "title", "source", "timestamp", "url", "category", "country"]].to_numpy())]
+    # crawl some data on this topic and update the topic
 
     return {"len": len(results), "results": results}
 
