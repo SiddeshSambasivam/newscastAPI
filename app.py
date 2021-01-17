@@ -13,6 +13,7 @@ import pandas as pd
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 import atexit
+from scrapy.crawler import CrawlerProcess
 
 from utils import convert_str_to_datetime
 from utils import parse_data
