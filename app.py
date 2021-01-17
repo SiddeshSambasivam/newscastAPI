@@ -195,7 +195,7 @@ def endpoint():
     # Initialization of the default params
     config = {
         "query":  None,
-        "from_date": datetime.datetime.utcnow().date().strftime("%d/%m/%Y, %H:%M:%S"),
+        "from_date": datetime.datetime.utcnow().date().strftime("%d/%m/%Y, 00:00:00"),
         "to_date": datetime.datetime.utcnow().date().strftime("%d/%m/%Y, 23:59:29"),
         "articles_per_day": 10,
     }
