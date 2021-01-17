@@ -1,22 +1,20 @@
-SRC = $(wildcard lib/*/*.js)
-HTML = $(wildcard lib/*/*.html)
-TEMPLATES = $(HTML:.html=.js)
-LESS = $(wildcard lib/*/*.less)
-CSS = $(LESS:.less=.css)
+# Minimal makefile for Sphinx documentation
+#
 
-build: components $(SRC) $(TEMPLATES) $(CSS)
-	@component build --verbose --out . --name assets
+# You can set these variables from the command line, and also
+# from the environment for the first two.
+SPHINXOPTS    ?=
+SPHINXBUILD   ?= sphinx-build
+SOURCEDIR     = source
+BUILDDIR      = build
 
-components: component.json
-	@component install
+# Put it first so that "make" without argument is like "make help".
+help:
+	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-%.js: %.html
-	@component convert $<
+.PHONY: help Makefile
 
-%.css: %.less
-	@lessc $< $@
-
-clean:
-	rm -fr build components $(TEMPLATES)
-
-.PHONY: clean
+# Catch-all target: route all unknown targets to Sphinx using the new
+# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
+%: Makefile
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
