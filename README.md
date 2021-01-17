@@ -125,3 +125,4 @@ Will be implementing these features as soon as possible...
 - [ ] Top keywords that occurs in news on any given day
 - [ ] Search by category
 - [ ] Search by country
+- [ ] Unit tests
