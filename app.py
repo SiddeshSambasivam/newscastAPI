@@ -19,29 +19,39 @@ import atexit
 
 from utils import convert_str_to_datetime
 from utils import parse_data
+from utils import parse_results
 
+# FLASK Configs
 app = Flask(__name__)
 app.config["DEBUG"] = False
 CORS(app)
 
+# Set up logger and the logging levels
 logger = logging.getLogger()
 apscheduler_logger = logging.getLogger("apscheduler").setLevel(logging.ERROR)
 logging.basicConfig(level="INFO")
 
+# Environment Variables
 PORT = int(os.environ.get("PORT", 10000))
 user_ = os.environ.get("user_")
 pass_ = os.environ.get("pass_")
+
+# Caching Variables
 INITIAL_CACHE = True
+data_frame = None  # local caching: contains all the records in the database
 
-data_frame = None  # local caching
-
+# Setting up the background processes
 scheduler = BackgroundScheduler()
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
 cache_job_start = None
 
 
-def cache_data():
+def cache_data() -> None:
+    '''
+    Caches the database locally during startup and 
+    creates a job to caches database recurring for every 75 minutes
+    '''
 
     global data_frame
     global INITIAL_CACHE
@@ -75,6 +85,7 @@ def cache_data():
     del db, client
 
 
+# Starts the initial caching after 10 seconds
 cache_job_start = scheduler.add_job(
     func=cache_data,
     trigger=IntervalTrigger(seconds=10),
@@ -122,6 +133,7 @@ def getby_timestamp(from_date: datetime, to_date: datetime, articles_per_day: in
 
 
 def get_results(from_date: str, to_date: str, query: str = None, articles_per_day: int = 10) -> dict:
+    '''Returns a dict of the search results with all the user constraints'''
 
     timeperiod_condn = (from_date != datetime.datetime.utcnow().date().strftime("%d/%m/%Y, %H:%M:%S")
                         or to_date != "".join([datetime.datetime.utcnow().date().strftime("%d/%m/%Y"), ", 23:59:59"]))
@@ -136,13 +148,14 @@ def get_results(from_date: str, to_date: str, query: str = None, articles_per_da
 
             results = getby_timestamp(
                 from_date, to_date, articles_per_day, data_frame)
-            results = [parse_data(row[0]) for row in zip(results.iloc[:articles_per_day][[
-                "title", "source", "timestamp", "url", "category", "country"]].to_numpy())]
+
+            results = parse_results(
+                raw_results=results, articles_per_day=articles_per_day)
             return {"len": len(results), "results": results}
 
         # In case no query provided, return the top 10 recent headlines
-        results = [parse_data(row[0]) for row in zip(data_frame.iloc[:articles_per_day][[
-            "title", "source", "timestamp", "url", "category", "country"]].to_numpy())]
+        results = parse_results(
+            raw_results=results, articles_per_day=articles_per_day)
 
         return {"len": len(results), "results": results}
 
@@ -153,15 +166,14 @@ def get_results(from_date: str, to_date: str, query: str = None, articles_per_da
 
         results = getby_timestamp(
             from_date, to_date, articles_per_day, results)
-        results = [parse_data(row[0]) for row in zip(
-            results[["title", "source", "timestamp", "url", "category", "country"]].to_numpy())]
+        results = parse_results(raw_results=results)
 
         return {"len": len(results), "results": results}
 
-    results = [parse_data(row[0]) for row in zip(results.iloc[:articles_per_day][[
-        "title", "source", "timestamp", "url", "category", "country"]].to_numpy())]
+    results = parse_results(
+        raw_results=results, articles_per_day=articles_per_day)
 
-    # crawl some data on this topic and update the topic
+    # NOTE: Implement crawling when a topic has zero results
 
     return {"len": len(results), "results": results}
 

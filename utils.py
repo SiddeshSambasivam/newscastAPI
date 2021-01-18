@@ -3,6 +3,15 @@ import pandas as pd
 import re
 
 
+def parse_results(raw_results: pd.DataFrame, articles_per_day: int = None) -> list:
+    '''Iterates through each record in dataframe and returning a list of all the records as dict'''
+
+    results = [parse_data(row[0]) for row in zip(raw_results.iloc[:articles_per_day][[
+        "title", "source", "timestamp", "url", "category", "country"]].to_numpy())]
+
+    return results
+
+
 def parse_data(record: list) -> dict:
     '''Converts a record in a dataframe to dict'''
 
