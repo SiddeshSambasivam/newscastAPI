@@ -38,11 +38,7 @@ data_frame = None  # local caching
 scheduler = BackgroundScheduler()
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
-
-cache_job_start = scheduler.add_job(
-    func=cache_data,
-    trigger=IntervalTrigger(seconds=10),
-    replace_existing=True)
+cache_job_start = None
 
 
 def cache_data():
@@ -77,6 +73,12 @@ def cache_data():
     logger.info(f"Cached {len(data_frame)} records")
 
     del db, client
+
+
+cache_job_start = scheduler.add_job(
+    func=cache_data,
+    trigger=IntervalTrigger(seconds=10),
+    replace_existing=True)
 
 
 def query_search(query: str) -> pd.DataFrame:
