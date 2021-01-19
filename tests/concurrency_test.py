@@ -13,8 +13,8 @@ response_time = None
 
 
 def test_mock_service():
-    url = 'http://0.0.0.0:10000/api?query=trump&articles_per_day=2&from_date=01/01/2021,%2000:00:00&to_date=07/01/2021,%2000:00:00'
-    # url = "https://newscast-api.herokuapp.com/api"
+
+    url = "https://newscast-api.herokuapp.com/api"
     resp = requests.get(url)
 
     if resp.status_code != 200:
@@ -28,9 +28,8 @@ def test_mock_service():
 
     elif resp.status_code == 200:
         # print()
-        # print(*resp.json()["results"], sep="\n\n")
-        # print()
-        # logging.info('Test passed.')
+        assert len(resp.json()["results"]) == 10
+        logging.info('Test passed.')
         return 'pass', resp.elapsed.total_seconds()
 
     else:
@@ -49,8 +48,6 @@ def loop_test(loop_wait=0, loop_times=sys.maxsize):
     while looped_times < loop_times:
         # run an API test
         test_result, elapsed_time = test_mock_service()
-        # logging.info(f"Elapsed Time: {elapsed_time}")
-        # print()
         response_time.append(elapsed_time)
         # put results into a queue for statistics
         queue_results.put(['test_mock_service', test_result, elapsed_time])
@@ -63,8 +60,8 @@ def loop_test(loop_wait=0, loop_times=sys.maxsize):
 if __name__ == '__main__':
     response_time = []
     ### Test Settings ###
-    concurrent_users = 100
-    loop_times = 10
+    concurrent_users = 3
+    loop_times = 2
 
     workers = []
     start_time = time.time()
