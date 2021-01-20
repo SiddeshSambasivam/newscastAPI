@@ -16,8 +16,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 import atexit
 
-from filters import filter_by_query, filter_by_from_date, filter_by_to_date, filter_by_category, filter_by_category, filter_by_apd
-from utils import parse_data, convert_str_to_datetime, parse_results
+from src.filters import filter_by_query, filter_by_from_date, filter_by_to_date, filter_by_category, filter_by_category, filter_by_apd
+from src.utils import parse_data, convert_str_to_datetime, parse_results
 
 
 # FLASK Configs
@@ -99,18 +99,6 @@ cache_job_start = scheduler.add_job(
 def get_results(from_date: str, to_date: str, query: str = None, articles_per_day: int = 10) -> dict:
     '''
     Returns a dict of the search results with all the user constraints
-
-    results = None
-
-    1. if from_date != default(): filter_from_date() else None
-    2. if to_date != default(): filter_to_date() else None
-    <-- country check  --> 
-    <-- category check -->
-    3. if query: query_search() else None
-    4. if articles_per_day != 10: filter_apd() else None
-
-    return results
-
     NOTE: Implement crawling when a topic has zero results
     '''
 
@@ -142,7 +130,7 @@ def get_results(from_date: str, to_date: str, query: str = None, articles_per_da
 
 @app.route("/api", methods=["GET"])
 def endpoint():
-    '''parses all the params and returns the result json'''
+    '''Parses all the params and returns the result json'''
 
     # Initialization of the default params
     config = {
