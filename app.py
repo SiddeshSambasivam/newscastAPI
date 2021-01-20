@@ -74,12 +74,14 @@ def cache_data() -> None:
 
     convert_start = time.time()
     data_frame = pd.DataFrame(list(db.find({})))
+    data_frame["timestamp"] = data_frame['timestamp'].apply(
+        lambda x: convert_str_to_datetime(x))
     convert_end = time.time()
 
     logging.info(
         f"Database loaded in {(db_end - db_start)} seconds and converted to pandas dataframe in {(convert_end-convert_start)} seconds, with initial cache condition set to {INITIAL_CACHE}")
 
-    data_frame.sort_values(by=["unix timestamp"],
+    data_frame.sort_values(by=["timestamp"],
                            ascending=False, inplace=True)
 
     logger.info(f"Cached {len(data_frame)} records")
@@ -90,7 +92,7 @@ def cache_data() -> None:
 # Starts the initial caching after 10 seconds
 cache_job_start = scheduler.add_job(
     func=cache_data,
-    trigger=IntervalTrigger(seconds=10),
+    trigger=IntervalTrigger(seconds=1),
     replace_existing=True)
 
 
@@ -111,9 +113,6 @@ def get_results(from_date: str, to_date: str, query: str = None, articles_per_da
 
     NOTE: Implement crawling when a topic has zero results
     '''
-
-    timeperiod_condn = (from_date != datetime.datetime.utcnow().date().strftime("%d/%m/%Y, %H:%M:%S")
-                        or to_date != "".join([datetime.datetime.utcnow().date().strftime("%d/%m/%Y"), ", 23:59:59"]))
 
     global data_frame
 
@@ -136,6 +135,8 @@ def get_results(from_date: str, to_date: str, query: str = None, articles_per_da
         "results": results
     }
 
+    del results
+
     return return_dict
 
 
@@ -147,7 +148,7 @@ def endpoint():
     config = {
         "query":  None,
         "from_date": datetime.datetime.utcnow().date().strftime("%d/%m/%Y, 00:00:00"),
-        "to_date": datetime.datetime.utcnow().date().strftime("%d/%m/%Y, 23:59:29"),
+        "to_date": datetime.datetime.utcnow().date().strftime("%d/%m/%Y, 23:59:59"),
         "articles_per_day": 10,
     }
 
@@ -164,10 +165,17 @@ def endpoint():
     articles_per_day = int(config["articles_per_day"])
 
     if convert_str_to_datetime(config["from_date"]) == None or convert_str_to_datetime(config["to_date"]) == None or \
-            convert_str_to_datetime(config["from_date"]) < convert_str_to_datetime(config["to_date"]):
-        response = flask.Response()
-        response.status_code = 422
-        return response
+            convert_str_to_datetime(config["from_date"]) > convert_str_to_datetime(config["to_date"]):
+
+        if config["to_date"] != datetime.datetime.utcnow().date().strftime("%d/%m/%Y, 23:59:59") and \
+                config["from_date"] == datetime.datetime.utcnow().date().strftime("%d/%m/%Y, 00:00:00"):
+
+            config["from_date"] = data_frame.iloc[-1]["timestamp"].strftime(
+                "%d/%m/%Y, %H:%M:%S")
+        else:
+            response = flask.Response()
+            response.status_code = 422
+            return response
 
     results = get_results(
         query=query,

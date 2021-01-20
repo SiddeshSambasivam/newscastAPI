@@ -1,29 +1,54 @@
 import datetime
-import pandas as pd
+import logging
 import re
+
+import pandas as pd
 
 logger = logging.getLogger()
 logging.basicConfig(level="INFO")
 
 
 def filter_by_from_date(from_date: datetime, local_df: pd.DataFrame) -> pd.DataFrame:
-    raise NotImplementedError
+    '''Returns the dataframe after filtering samples published after the from_date'''
+
+    result_frame = local_df[(local_df["timestamp"] >= from_date)]
+
+    del from_date, local_df
+
+    return result_frame
 
 
 def filter_by_to_date(to_date: datetime, local_df: pd.DataFrame) -> pd.DataFrame:
-    raise NotImplementedError
+    '''Returns the dataframe after filtering samples published till the to_date'''
 
+    result_frame = local_df[(local_df["timestamp"] <= to_date)]
 
-def filter_by_country(country: str, local_df: pd.DataFrame) -> pd.DataFrame:
-    raise NotImplementedError
+    del to_date, local_df
 
-
-def filter_by_category(category: str, local_df: pd.DataFrame) -> pd.DataFrame:
-    raise NotImplementedError
+    return result_frame
 
 
 def filter_by_apd(articles_per_day: int, local_df: pd.DataFrame) -> pd.DataFrame:
-    raise NotImplementedError
+    '''Returns by selecting limited number of articles per day'''
+
+    local_df.sort_values(by="timestamp", ascending=False, inplace=True)
+    local_df["unix timestamp"] = local_df["timestamp"].apply(
+        lambda x: datetime.datetime(x.year, x.month, x.day))
+
+    dates = local_df["unix timestamp"].unique()
+    titles = list()
+
+    for d in dates:
+        _recs = local_df[local_df["unix timestamp"] == d]
+        _recs.sort_values(by="timestamp", ascending=False, inplace=True)
+        titles += _recs["title"].iloc[:articles_per_day].to_list()
+
+    result_frame = local_df[local_df["title"].isin(
+        titles)][["title", "source", "timestamp", "url", "category", "country"]]
+
+    del local_df, dates
+
+    return result_frame
 
 
 def filter_by_query(query: str, local_df: pd.DataFrame) -> pd.DataFrame:
@@ -39,29 +64,9 @@ def filter_by_query(query: str, local_df: pd.DataFrame) -> pd.DataFrame:
     return result_frame
 
 
-def filter_by_timestamp(from_date: datetime, to_date: datetime, articles_per_day: int, local_df: pd.DataFrame) -> pd.DataFrame:
-    '''Filters by the timeperiod & articles per day and returns the results'''
+def filter_by_country(country: str, local_df: pd.DataFrame) -> pd.DataFrame:
+    raise NotImplementedError
 
-    from_timestamp = int(datetime.datetime.timestamp(from_date))
-    to_timestamp = int(datetime.datetime.timestamp(to_date))
 
-    result_frame = local_df[(local_df["unix timestamp"] >= from_timestamp) & (
-        local_df["unix timestamp"] <= to_timestamp)]
-    result_frame.sort_values(
-        by="unix timestamp", ascending=False, inplace=True)
-    result_frame["unix timestamp"] = result_frame["unix timestamp"].apply(
-        lambda x: datetime.datetime.utcfromtimestamp(x).date().strftime('%d-%m-%Y'))
-    dates = result_frame["unix timestamp"].unique()
-
-    titles = []
-
-    for d in dates:
-        _recs = result_frame[result_frame["unix timestamp"] == d]
-        titles += _recs["title"].iloc[:articles_per_day].to_list()
-
-    result_frame = result_frame[result_frame["title"].isin(
-        titles)][["title", "source", "timestamp", "url", "category", "country"]]
-
-    del from_timestamp, to_timestamp, titles
-
-    return result_frame
+def filter_by_category(category: str, local_df: pd.DataFrame) -> pd.DataFrame:
+    raise NotImplementedError
