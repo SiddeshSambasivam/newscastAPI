@@ -1,12 +1,17 @@
 import datetime
-import pandas as pd
+import logging
 import re
 
+import pandas as pd
 
-def parse_results(raw_results: pd.DataFrame, articles_per_day: int = None) -> list:
+logger = logging.getLogger()
+logging.basicConfig(level="INFO")
+
+
+def parse_results(raw_results: pd.DataFrame) -> list:
     '''Iterates through each record in dataframe and returning a list of all the records as dict'''
 
-    results = [parse_data(row[0]) for row in zip(raw_results.iloc[:articles_per_day][[
+    results = [parse_data(row[0]) for row in zip(raw_results[[
         "title", "source", "timestamp", "url", "category", "country"]].to_numpy())]
 
     return results

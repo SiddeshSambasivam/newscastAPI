@@ -92,26 +92,26 @@ Examples
 
 3. Search for a query with `from_date`
 
-    **Sample:** `https://newscast-api.herokuapp.com/api?query=covid&from_date=10/01/2021, 00:00:00`
+    **Sample:** `https://newscast-api.herokuapp.com/api?query=covid&from_date=18/01/2021, 00:00:00`
 
-    Returns the news about covid from 10 January, 2021 till today with 10 articles per day.
+    Returns the news about covid from 18 January, 2021 till today with 10 articles per day.
 
 4. Search for a query with `to_date`
 
-    **Sample:** `https://newscast-api.herokuapp.com/api?query=lebron&to_date=10/01/2021, 00:00:00`
+    **Sample:** `https://newscast-api.herokuapp.com/api?query=lebron&to_date=15/01/2021, 00:00:00`
 
-    Returns all the news about lebron till 10 January, 2021 with 10 articles per day.
+    Returns all the news about lebron till 15 January, 2021 with 10 articles per day.
 
 5. Search for a query with `from_date` , `to_date` and `articles_per_day`
 
-    **Sample:** `https://newscast-api.herokuapp.com/api?query=google&from_date=10/01/2021, 00:00:00&to_date=15/01/2021, 00:00:00&articles_per_day=5`
+    **Sample:** `https://newscast-api.herokuapp.com/api?query=google&from_date=15/01/2021, 00:00:00&to_date=18/01/2021, 23:59:59&articles_per_day=5`
 
-    Returns 5 news per day from 10 Jan to 15 Jan in the year 2021 about google. 
+    Returns 5 news per day from 15 Jan to 18 Jan in the year 2021 about google. 
 
     **Note:** The `articles_per_day` might not be very accurate and could give more or less than the specified value due to small database size.
 
 6. Search by only timeframe
 
-    **Sample:** `https://newscast-api.herokuapp.com/api?from_date=10/01/2021, 00:00:00&to_date=15/01/2021, 00:00:00`
+    **Sample:** `https://newscast-api.herokuapp.com/api?from_date=14/01/2021, 00:00:00&to_date=17/01/2021, 23:59:59`
 
-    Returns all the news from 10 Jan to 15 Jan in the year 2021.
+    Returns all the news from 14 Jan to 17 Jan in the year 2021.
