@@ -43,7 +43,8 @@ if mode == None:
     params.add_argument("--develop", type=bool, default=False,
                         help="Set the value to true during development")
     args = params.parse_args()
-else:
+elif mode == "prod":
+    logger.info("Production Mode")
     args = Namespace(develop=False)
 
     # Caching Variables
