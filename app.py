@@ -43,7 +43,7 @@ if mode == None:
     params.add_argument("--develop", type=bool, default=False,
                         help="Set the value to true during development")
     args = params.parse_args()
-elif mode == "prod":
+else:
     logger.info("Production Mode")
     args = Namespace(develop=False)
 
