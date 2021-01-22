@@ -1,7 +1,6 @@
 import os
 import logging
 import datetime
-import argparse
 import re
 import time
 
@@ -39,6 +38,7 @@ pass_ = os.environ.get("pass_")
 # Developement
 mode = os.environ.get("mode")
 if mode == None:
+    import argparse
     params = argparse.ArgumentParser()
     params.add_argument("--develop", type=bool, default=False,
                         help="Set the value to true during development")
