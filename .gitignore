@@ -7,6 +7,10 @@ _docpress
 node_modules	
 *.so
 
+# Development 
+develop.ipynb
+dumps.csv
+
 # Distribution / packaging
 .Python
 build/

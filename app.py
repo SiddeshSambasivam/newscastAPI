@@ -1,6 +1,7 @@
 import os
 import logging
 import datetime
+import argparse
 import re
 import time
 
@@ -34,6 +35,12 @@ logging.basicConfig(level="INFO")
 PORT = int(os.environ.get("PORT", 10000))
 user_ = os.environ.get("user_")
 pass_ = os.environ.get("pass_")
+
+# Developement
+params = argparse.ArgumentParser()
+params.add_argument("--develop", type=bool, default=False,
+                    help="Set the value to true during development")
+args = params.parse_args()
 
 # Caching Variables
 INITIAL_CACHE = True
@@ -90,10 +97,21 @@ def cache_data() -> None:
 
 
 # Starts the initial caching after 10 seconds
-cache_job_start = scheduler.add_job(
-    func=cache_data,
-    trigger=IntervalTrigger(seconds=1),
-    replace_existing=True)
+if args.develop:
+    # load the dump data
+    logger.info("Development mode")
+    data_frame = pd.read_csv("./develop/development_data.csv")
+    data_frame["timestamp"] = data_frame['timestamp'].apply(
+        lambda x: convert_str_to_datetime(x))
+    data_frame.sort_values(by=["timestamp"],
+                           ascending=False, inplace=True)
+    logging.info(f"Development Dataset Loaded")
+else:
+    # Production
+    cache_job_start = scheduler.add_job(
+        func=cache_data,
+        trigger=IntervalTrigger(seconds=1),
+        replace_existing=True)
 
 
 def get_results(from_date: str, to_date: str, query: str = None, articles_per_day: int = 10) -> dict:
