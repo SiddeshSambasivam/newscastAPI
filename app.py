@@ -18,7 +18,7 @@ from apscheduler.triggers.interval import IntervalTrigger
 import atexit
 
 from src.filters import filter_by_query, filter_by_from_date, filter_by_to_date, filter_by_category, filter_by_category, filter_by_apd
-from src.utils import parse_data, convert_str_to_datetime, parse_results
+from src.utils import parse_data, convert_str_to_datetime, parse_results, Namespace
 
 
 # FLASK Configs
@@ -37,12 +37,16 @@ user_ = os.environ.get("user_")
 pass_ = os.environ.get("pass_")
 
 # Developement
-params = argparse.ArgumentParser()
-params.add_argument("--develop", type=bool, default=False,
-                    help="Set the value to true during development")
-args = params.parse_args()
+mode = os.environ.get("mode")
+if mode == None:
+    params = argparse.ArgumentParser()
+    params.add_argument("--develop", type=bool, default=False,
+                        help="Set the value to true during development")
+    args = params.parse_args()
+else:
+    args = Namespace(develop=False)
 
-# Caching Variables
+    # Caching Variables
 INITIAL_CACHE = True
 data_frame = None  # local caching: contains all the records in the database
 

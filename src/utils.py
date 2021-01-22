@@ -37,3 +37,8 @@ def convert_str_to_datetime(s: str):
         datetime_ = None
 
     return datetime_
+
+
+class Namespace:
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
