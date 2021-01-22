@@ -28,7 +28,7 @@ def invalid_data_frame():
         df_dict[col] = []
         for i in range(5):
             df_dict[col].append(f"{col}:{i+1}")
-    return pd.DataFrame.from_dict(df_dict)
+    return pd.DataFrame.from_dict(df_dict), cols
 
 
 def test_parse_results_valid(valid_data_frame):
@@ -39,7 +39,7 @@ def test_parse_results_valid(valid_data_frame):
 
 
 def test_parse_results_invalid(invalid_data_frame):
-    cols = ["title", "source", "timestamp", "url", "category", "country"]
+    invalid_data_frame, cols = invalid_data_frame
     test_row = list(zip(invalid_data_frame[cols].to_numpy()))[0][0]
     try:
         result = parse_data(test_row)
