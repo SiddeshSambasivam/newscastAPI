@@ -105,7 +105,7 @@ def cache_data() -> None:
 if args.develop:
     # load the dump data
     logger.info("Development mode")
-    data_frame = pd.read_csv("./develop/development_data.csv")
+    data_frame = pd.read_csv("../develop/development_data.csv")
     data_frame["timestamp"] = data_frame['timestamp'].apply(
         lambda x: convert_str_to_datetime(x))
     data_frame.sort_values(by=["timestamp"],
