@@ -34,16 +34,16 @@ logging.basicConfig(level="INFO")
 PORT = int(os.environ.get("PORT", 10000))
 user_ = os.environ.get("user_")
 pass_ = os.environ.get("pass_")
+mode_ = os.environ.get("mode")
 
 # Developement
-mode = os.environ.get("mode")
-if mode == None:
+if mode_ == None:
     import argparse
     params = argparse.ArgumentParser()
     params.add_argument("--develop", type=bool, default=False,
                         help="Set the value to true during development")
     args = params.parse_args()
-else:
+elif mode_ == "prod":
     logger.info("Production Mode")
     args = Namespace(develop=False)
 
