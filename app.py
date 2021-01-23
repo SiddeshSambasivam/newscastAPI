@@ -34,7 +34,7 @@ logging.basicConfig(level="INFO")
 PORT = int(os.environ.get("PORT", 10000))
 user_ = os.environ.get("user_")
 pass_ = os.environ.get("pass_")
-mode_ = os.environ.get("mode")
+mode_ = os.environ.get("mode_")
 
 # Developement
 if mode_ == None:
