@@ -5,7 +5,7 @@
 <p align="center">
   <img src="https://badges.pufler.dev/updated/SiddeshSambasivam/newscastAPI" alt="GitHub license">
   <img alt="GitHub deployments" src="https://img.shields.io/github/deployments/SiddeshSambasivam/newscastAPI/newscast-api">
-  <img alt="GitHub file size in bytes" src="https://img.shields.io/github/size/SiddeshSambasivam/newscastAPI/app.py">
+  <img alt="GitHub file size in bytes" src="https://img.shields.io/github/size/SiddeshSambasivam/newscastAPI/src/app.py">
   <a href='https://newscastapi.readthedocs.io/en/latest/?badge=latest'>
     <img src='https://readthedocs.org/projects/newscastapi/badge/?version=latest' alt='Documentation Status' />
   </a>
