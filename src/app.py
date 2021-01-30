@@ -16,10 +16,6 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 import atexit
 
-from src.filters import filter_by_query, filter_by_to_date, filter_by_category, filter_by_apd, filter_by_country, filter_by_from_date
-from src.utils import parse_data, convert_str_to_datetime, parse_results, Namespace
-
-
 # FLASK Configs
 app = Flask(__name__)
 app.config["DEBUG"] = False
@@ -38,12 +34,17 @@ mode_ = os.environ.get("mode_")
 
 # Developement
 if mode_ == None:
+    from filters import filter_by_query, filter_by_to_date, filter_by_category, filter_by_apd, filter_by_country, filter_by_from_date
+    from utils import parse_data, convert_str_to_datetime, parse_results, Namespace
     import argparse
     params = argparse.ArgumentParser()
     params.add_argument("--develop", type=bool, default=False,
                         help="Set the value to true during development")
     args = params.parse_args()
 elif mode_ == "prod":
+    from src.filters import filter_by_query, filter_by_to_date, filter_by_category, filter_by_apd, filter_by_country, filter_by_from_date
+    from src.utils import parse_data, convert_str_to_datetime, parse_results, Namespace
+
     logger.info("Production Mode")
     args = Namespace(develop=False)
 
