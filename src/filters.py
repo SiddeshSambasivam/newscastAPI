@@ -65,7 +65,14 @@ def filter_by_query(query: str, local_df: pd.DataFrame) -> pd.DataFrame:
 
 
 def filter_by_country(country: str, local_df: pd.DataFrame) -> pd.DataFrame:
-    raise NotImplementedError
+
+    country = country.upper()
+
+    result_frame = local_df[local_df['country']==country]
+
+    del country
+
+    return result_frame
 
 
 def filter_by_category(category: str, local_df: pd.DataFrame) -> pd.DataFrame:

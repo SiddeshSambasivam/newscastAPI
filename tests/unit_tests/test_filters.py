@@ -18,6 +18,8 @@ def test_dataframe():
             if col == "timestamp":
                 date = datetime.datetime(2021, randint(4, 8), randint(10, 20))
                 df_dict[col].append(date)
+            elif col == "country":
+                df_dict[col].append("US")
             else:
                 df_dict[col].append(f"{col}:{i+1}")
     return pd.DataFrame.from_dict(df_dict)
@@ -63,11 +65,8 @@ def test_filter_by_query(test_dataframe):
 
 
 def test_filter_by_country(test_dataframe):
-    try:
-        filter_by_country("USA", test_dataframe)
-    except Exception as e:
-        assert type(e) == NotImplementedError
-
+    result = filter_by_country("US", test_dataframe)
+    assert test_dataframe.shape[0] == len(test_dataframe)
 
 def test_filter_by_category(test_dataframe):
     try:

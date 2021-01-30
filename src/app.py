@@ -16,7 +16,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 import atexit
 
-from filters import filter_by_query, filter_by_from_date, filter_by_to_date, filter_by_category, filter_by_category, filter_by_apd
+from filters import filter_by_query, filter_by_to_date, filter_by_category, filter_by_apd, filter_by_country, filter_by_from_date
 from utils import parse_data, convert_str_to_datetime, parse_results, Namespace
 
 
@@ -105,7 +105,6 @@ def cache_data() -> None:
 if args.develop:
     # load the dump data
     logger.info("Development mode")
-    print(f"{os.listdir('../')}")
     data_frame = pd.read_csv("./develop/development_data.csv")
     data_frame["timestamp"] = data_frame['timestamp'].apply(
         lambda x: convert_str_to_datetime(x))
@@ -120,7 +119,7 @@ else:
         replace_existing=True)
 
 
-def get_results(from_date: str, to_date: str, query: str = None, articles_per_day: int = 10) -> dict:
+def get_results(from_date: str, to_date: str, query: str = None, country:str= None, articles_per_day: int = 10) -> dict:
     '''
     Returns a dict of the search results with all the user constraints
     NOTE: Implement crawling when a topic has zero results
@@ -134,6 +133,9 @@ def get_results(from_date: str, to_date: str, query: str = None, articles_per_da
     results = data_frame
     results = filter_by_from_date(from_date=from_date, local_df=results)
     results = filter_by_to_date(to_date=to_date, local_df=results)
+
+    if country != None:
+        results = filter_by_country(country=country, local_df=results)
 
     if query != None:
         results = filter_by_query(query=query, local_df=results)
@@ -162,6 +164,7 @@ def endpoint():
         "from_date": datetime.datetime.utcnow().date().strftime("%d/%m/%Y, 00:00:00"),
         "to_date": datetime.datetime.utcnow().date().strftime("%d/%m/%Y, 23:59:59"),
         "articles_per_day": 10,
+        "country": None
     }
 
     params = request.args.to_dict()  # parse user params
@@ -188,12 +191,21 @@ def endpoint():
             response = flask.Response()
             response.status_code = 422
             return response
+    
+    if config['country'] != None:
+        config['country'] = config['country'].upper()
+
+        if not config['country'] in ["US", "IN", "SG"]:
+            response = flask.Response()
+            response.status_code = 422
+            return response
 
     results = get_results(
         query=query,
         from_date=config["from_date"],
         to_date=config["to_date"],
-        articles_per_day=articles_per_day
+        articles_per_day=articles_per_day,
+        country=config['country']
     )
 
     return flask.jsonify(results)
