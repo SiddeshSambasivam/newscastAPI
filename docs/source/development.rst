@@ -20,7 +20,7 @@ For developmental purposes, a very small subset of the database is available in 
 
 To locally deploy the API, run the following command
     
-    ``python app.py --develop True``
+    ``python src/app.py --develop True``
 
 This will set the API to development mode and you should be able to develop features or fix bugs locally.
 

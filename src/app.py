@@ -16,8 +16,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 import atexit
 
-from src.filters import filter_by_query, filter_by_from_date, filter_by_to_date, filter_by_category, filter_by_category, filter_by_apd
-from src.utils import parse_data, convert_str_to_datetime, parse_results, Namespace
+from filters import filter_by_query, filter_by_from_date, filter_by_to_date, filter_by_category, filter_by_category, filter_by_apd
+from utils import parse_data, convert_str_to_datetime, parse_results, Namespace
 
 
 # FLASK Configs
@@ -105,7 +105,8 @@ def cache_data() -> None:
 if args.develop:
     # load the dump data
     logger.info("Development mode")
-    data_frame = pd.read_csv("../develop/development_data.csv")
+    print(f"{os.listdir('../')}")
+    data_frame = pd.read_csv("./develop/development_data.csv")
     data_frame["timestamp"] = data_frame['timestamp'].apply(
         lambda x: convert_str_to_datetime(x))
     data_frame.sort_values(by=["timestamp"],
