@@ -16,8 +16,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 import atexit
 
-from filters import filter_by_query, filter_by_to_date, filter_by_category, filter_by_apd, filter_by_country, filter_by_from_date
-from utils import parse_data, convert_str_to_datetime, parse_results, Namespace
+from src.filters import filter_by_query, filter_by_to_date, filter_by_category, filter_by_apd, filter_by_country, filter_by_from_date
+from src.utils import parse_data, convert_str_to_datetime, parse_results, Namespace
 
 
 # FLASK Configs
