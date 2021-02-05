@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://badges.pufler.dev/updated/SiddeshSambasivam/newscastAPI" alt="GitHub license">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="GitHub license">
   <img alt="GitHub deployments" src="https://img.shields.io/github/deployments/SiddeshSambasivam/newscastAPI/newscast-api">
   <img alt="GitHub file size in bytes" src="https://img.shields.io/github/size/SiddeshSambasivam/newscastAPI/src/app.py">
   <a href='https://newscastapi.readthedocs.io/en/latest/?badge=latest'>
@@ -33,48 +33,13 @@ You can search news articles using the following options:
 
 <br/>
 
-# **Inspiration**
-
-I have been working on a personal project to track the sentiment of any given word across various news articles and tweets. I needed an API to fetch all the news headlines for any given word and luckily I found quite a lot of alternatives which provided the exact service, but all of them were either expensive or had a lot of restrictions for its usage. So, I thought of building something which does the job at an acceptable performance.
-
-<br/>
-
 # **Usage**
 
 **API:** `https://newscast-api.herokuapp.com/api`
 
-```python
-# Python 3.7.9
-
-import requests
-
-# by default, returns the 10 recent news headlines in the database
-url = "https://newscast-api.herokuapp.com/api"
-
-response = requests.get(url)
-result = response.json()["results"]
-
-# results is a list of dict
-print(*result, sep="\n")
-```
-
-```js
-// node.js
-const fetch = require("node-fetch");
-
-fetch("https://newscast-api.herokuapp.com/api", {
-  method: "GET",
-})
-  .then(function (response) {
-    return response.json();
-  })
-  .then(function (data) {
-    console.log("Request succeeded with JSON response", data);
-  })
-  .catch(function (error) {
-    console.log("Request failed", error);
-  });
-```
+<p>
+  <img src="./assets/python.png"/>
+</p>
 
 - Using `query` without `from_date` and `to_date` will fetch today's news about the query, therefore its always best to specify the timeframe. For example,
 
@@ -82,9 +47,21 @@ fetch("https://newscast-api.herokuapp.com/api", {
 
   By default, the api only fetchs 10 articles per day about given `query`.
 
+<p>
+  <img src="./assets/js.png"/>
+</p>
+
 - Using only `from_date` and `to_date` will fetch all the news articles in the given timeframe. For example,
 
   `https://newscast-api.herokuapp.com/api?from_date=01/01/2021,%2000:00:00&to_date=07/01/2021,%2000:00:00&articles_per_day=100`
+
+Example code can be copied from the `examples` folder for testing purposes.
+
+<br/>
+
+# **Inspiration**
+
+I have been working on a personal project to track the sentiment of any given word across various news articles and tweets. I needed an API to fetch all the news headlines for any given word and luckily I found quite a lot of alternatives which provided the exact service, but all of them were either expensive or had a lot of restrictions for its usage. So, I thought of building something which does the job at an acceptable performance.
 
 <br/>
 
