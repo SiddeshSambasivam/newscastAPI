@@ -28,8 +28,8 @@ The API provides the following data for each news article,
 
 You can search news articles using the following options:
 
-- **Keywords:** You can search for any news articles which contains the keyword (using exact match).
-- **timeperiod** You can specify the time period that you want articles to be published on. For example, search for `trump` from `03-01-2021` to `06-01-2021`. There is also an additional option of choosing how many articles to be returned for each day for any given keyword with in a timeperiod.
+-   **Keywords:** You can search for any news articles which contains the keyword (using exact match).
+-   **timeperiod** You can specify the time period that you want articles to be published on. For example, search for `trump` from `03-01-2021` to `06-01-2021`. There is also an additional option of choosing how many articles to be returned for each day for any given keyword with in a timeperiod.
 
 <br/>
 
@@ -41,19 +41,19 @@ You can search news articles using the following options:
   <img src="./assets/python.png"/>
 </p>
 
-- Using `query` without `from_date` and `to_date` will fetch today's news about the query, therefore its always best to specify the timeframe. For example,
+-   Using `query` without `from_date` and `to_date` will fetch today's news about the query, therefore its always best to specify the timeframe. For example,
 
-  `https://newscast-api.herokuapp.com/api?query=ronaldo&from_date=01/01/2021,%2000:00:00&to_date=07/01/2021,%2000:00:00`
+    `https://newscast-api.herokuapp.com/api?query=ronaldo&from_date=01/01/2021,%2000:00:00&to_date=07/01/2021,%2000:00:00`
 
-  By default, the api only fetchs 10 articles per day about given `query`.
+    By default, the api only fetchs 10 articles per day about given `query`.
 
 <p>
   <img src="./assets/js.png"/>
 </p>
 
-- Using only `from_date` and `to_date` will fetch all the news articles in the given timeframe. For example,
+-   Using only `from_date` and `to_date` will fetch all the news articles in the given timeframe. For example,
 
-  `https://newscast-api.herokuapp.com/api?from_date=01/01/2021,%2000:00:00&to_date=07/01/2021,%2000:00:00&articles_per_day=100`
+    `https://newscast-api.herokuapp.com/api?from_date=01/01/2021,%2000:00:00&to_date=07/01/2021,%2000:00:00&articles_per_day=100`
 
 Example code can be copied from the `examples` folder for testing purposes.
 
@@ -72,9 +72,9 @@ I have been working on a personal project to track the sentiment of any given wo
 1. Data collection Pipeline
 2. Data serving pipeline
 
-<p align="center">
-  <img src="./assets/collection.png" style="width:1000px">
-</p>
+<!-- <p align="center"> -->
+  <!-- <img src="./assets/collection.png" style="width:1000px"> -->
+<!-- </p> -->
 
 <p align="center">
   <img src="./assets/serve.png" style="width:1000px">

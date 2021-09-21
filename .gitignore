@@ -141,3 +141,9 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/_docpress
+
+.ipynb_checkpoints
+preprocess.ipynb
+feeds.csv
+feeds_new.csv
+API_sandbox.ipynb
