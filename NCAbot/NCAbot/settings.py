@@ -1,11 +1,7 @@
-# Scrapy settings for NCAbot project
-#
-# For simplicity, this file contains only settings considered important or
-# commonly used. You can find more settings consulting the documentation:
-#
-#     https://docs.scrapy.org/en/latest/topics/settings.html
-#     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+import os
+
+USER = os.environ.get("user_")
+PASS = os.environ.get("pass_")
 
 BOT_NAME = "NCAbot"
 
@@ -16,9 +12,7 @@ ITEM_PIPELINES = {
     "NCAbot.pipelines.MongoDBPipeline": 300,
 }
 
-MONGO_URI = (
-    "mongodb+srv://admin:thisisatestpassword@db-news-and-tweets.buxsd.mongodb.net/test"
-)
+MONGO_URI = f"mongodb+srv://{USER}:{PASS}@db-news-and-tweets.buxsd.mongodb.net/test"
 MONGO_DB = "daily_feeds"
 # MONGODB_PORT = 27017
 # MONGODB_COLLECTION = "test_feed"
